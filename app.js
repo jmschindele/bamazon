@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 
   // Your password
   password: "",
-  database: "greatBay_DB"
+  database: "bamazon_DB"
 });
 
 // connect to the mysql server and sql database
