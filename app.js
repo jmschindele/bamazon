@@ -25,8 +25,11 @@ connection.connect(function(err) {
 
 // function which prompts the user for what action they should take
 function start() {
+
+readProducts();
+
   inquirer
-    .prompt({
+    .prompt([{
       name: "getID",
       type: "prompt",
       message: "Please enter the ID of the product you wish to purchase.",
@@ -35,5 +38,16 @@ function start() {
         name: "getQty",
         type: "prompt",
         message: "How many would you like to purchase?",
-    })
+    }])
+    connection.end();
 }
+
+
+// search a specific artist
+function readProducts() {
+    connection.query("SELECT * FROM products", function(err, res) {
+      if (err) throw err;
+      console.log(res);
+      
+    });
+  }
