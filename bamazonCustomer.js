@@ -1,6 +1,5 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var Table = require("cli-table");
 // create the connection information for the sql database
 var connection = mysql.createConnection({
   host: "localhost",
@@ -21,6 +20,25 @@ connection.connect(function(err) {
 // function which prompts the user for what action they should take
 function start() {
   readProducts();
+}
+//search a specific product
+function readProducts() {
+  connection.query("SELECT * FROM products", function(err, res) {
+    if (err) throw err;
+    //loop through all objects in the table
+    for (var i = 0; i < res.length; i++) {
+      //print out each item on its own line using template literals for formatting
+      console.log(
+        `ID: ${res[i].id} Product: ${res[i].product_name} Price: $${res[i].price}
+        `
+      );
+    }
+    //initialize inquirer function
+    askUser();
+  });
+}
+
+function askUser() {
   inquirer
     .prompt([
       {
@@ -44,7 +62,7 @@ function start() {
         { id: userChoice },
         function(err, res) {
           // console.log(res[0].stock_quantity)
-          if (res[0].stock_quantity > customerQty) {
+          if (res[0].stock_quantity >= customerQty) {
             console.log("Purchase Successful");
             var currentStock = res[0].stock_quantity - customerQty;
             connection.query("UPDATE products SET ? WHERE ?", [
@@ -54,27 +72,13 @@ function start() {
               {
                 id: userChoice
               }
-            ])
+            ]);
             connection.end();
           } else {
-            console.log("not enough in stock");
+            console.log("Not enough in stock. The transaction has been canceled.");
             connection.end();
           }
         }
       );
     });
-}
-//search a specific product
-function readProducts() {
-  connection.query("SELECT * FROM products", function(err, res) {
-    if (err) throw err;
-    // console.log(res);
-    for (var i = 0; i < res.length; i++) {
-      console.log(
-        `ID: ${res[i].id} Product: ${res[i].product_name} Department: ${
-          res[i].department_name
-        } Price: ${res[i].price}`
-      );
-    }
-  });
 }
