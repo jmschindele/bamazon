@@ -11,4 +11,5 @@ If there is enough of the product to complete the sale, the application responds
 
 If there is not enough of the product to complete the transaction, the application will respond "not enough in stock."
 
+Video of application in use:
 https://drive.google.com/file/d/1ScAG87PJ-YHD-utOUKKQrr4KcN8ZHE-X/view
